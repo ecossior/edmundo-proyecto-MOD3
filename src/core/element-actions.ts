@@ -1,20 +1,27 @@
 import { driverInstance } from "./driver";
 
 export class ElementActions {
-    
+        
     static async clickElement(locator: string) {
+        await driverInstance.Page.waitForSelector(locator);
         await driverInstance.Page.click(locator);
     }
 
-    static async fillElement(locator: string, value: string) {
-        await driverInstance.Page.fill(locator, value);
+    static async fillElement(locator: string, text: string): Promise<void> {
+        await driverInstance.Page.waitForSelector(locator);
+        await driverInstance.Page.fill(locator, text);
     }
 
-    static async isElementVisible(element: string) {
-        await driverInstance.Page.waitForTimeout(2000);
-        return await driverInstance.Page.isVisible(element, {
+    static async isElementVisible(locator: string): Promise<boolean> {
+        await driverInstance.Page.waitForSelector(locator);
+        return await driverInstance.Page.isVisible(locator, {
             timeout: 10000
         });
+    }
+
+    static async getElementText(locator: string): Promise<string> {
+        await driverInstance.Page.waitForSelector(locator);
+        return await driverInstance.Page.innerText(locator);
     }
    
 }
